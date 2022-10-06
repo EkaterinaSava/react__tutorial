@@ -10,28 +10,25 @@ function Square(props) {
   );
 }
 
+const boardSize = 3;
+
 function Board(props) {
-  const renderSquare = (i) => {
-    return <Square value={props.squares[i]} onClick={() => props.onClick(i)} />
-  }
+  const squaresToRender = [];
+
+  props.squares.forEach((_item, index, array) => {
+    if (index % boardSize === 0) {
+      squaresToRender.push(array.slice(index, index + boardSize));
+    }
+  })
 
   return (
     <div>
-      <div className="board-row">
-        {renderSquare(0)}
-        {renderSquare(1)}
-        {renderSquare(2)}
-      </div>
-      <div className="board-row">
-        {renderSquare(3)}
-        {renderSquare(4)}
-        {renderSquare(5)}
-      </div>
-      <div className="board-row">
-        {renderSquare(6)}
-        {renderSquare(7)}
-        {renderSquare(8)}
-      </div>
+      {squaresToRender.map((row, rowIndex) => <div key={rowIndex} className="board-row">
+        {row.map((_cell, cellIndex) => {
+          const index = rowIndex * boardSize + cellIndex;
+          return <Square key={index} value={props.squares[index]} onClick={() => props.onClick(index)} />
+        })}
+      </div>)}
     </div>
   );
 
